@@ -1,4 +1,4 @@
-FROM dpiquet/php5.5-apache2
+FROM dpik/php5.5-apache2
 
 # Install dependencies
 
