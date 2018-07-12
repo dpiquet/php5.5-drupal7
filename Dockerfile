@@ -5,15 +5,16 @@ FROM dpik/php5.5-apache2
 RUN set -xe \
     # Install PHP dependencies
     && apt-get update && apt-get install -y git subversion openssh-client coreutils unzip postgresql-client \
-    && apt-get install -y autoconf gcc g++ libpq-dev binutils-gold libgcc1 linux-headers-amd64 make python libmcrypt-dev libpng-dev libjpeg-dev libc-dev libfreetype6-dev libmcrypt-dev libicu-dev \
+    && apt-get install -y autoconf gcc g++ libpq-dev binutils-gold libgcc1 linux-headers-amd64 make python libmcrypt-dev libpng-dev libjpeg-dev libc-dev libfreetype6-dev libmcrypt-dev libicu-dev libldap2-dev\
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure ldap --with-libdir=/lib/x86_64-linux-gnu/ \
 
     # Install Xdebug
-    && pecl install xdebug \
+    && pecl install xdebug-2.5.5 \
     && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini \
 
     # Configuration PHP
-    && docker-php-ext-install -j$(nproc) iconv mbstring mcrypt intl pdo_pgsql gd zip bcmath \
+    && docker-php-ext-install -j$(nproc) iconv mbstring mcrypt intl pdo_pgsql gd zip bcmath ldap \
     && docker-php-source delete \
     && echo "Installing composer" \
 
